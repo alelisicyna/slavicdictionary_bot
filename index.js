@@ -36,6 +36,7 @@ function main() {
             };
             bot.action(lang_codes[i], (ctx) => {
                 ctx.telegram.deleteMessage(ctx.chat.id, set_language.message_id);
+                ctx.telegram.sendMessage(ctx.chat.id, 'Język interfejsa izbrany!');
                 lang = lang_codes[i];
             });
         };
@@ -65,7 +66,7 @@ function main() {
             bot.action(lang_codes[i], (ctx) => {
                 ctx.telegram.deleteMessage(ctx.chat.id, set_language.message_id);
                 ctx.telegram.deleteMessage(ctx.chat.id, main_msg);
-                ctx.reply('Język interfejsa izměnjeny!');
+                ctx.telegram.sendMessage(ctx.chat.id, 'Język interfejsa izměnjeny!');
                 set_language = 0;
                 lang = lang_codes[i];
                 return lang;
@@ -93,13 +94,12 @@ function main() {
             };
             throw new Error('Nothing was found');
         } catch(error) {
-            ctx.telegram.editMessageText(ctx.chat.id, answer.message_id, 0, '😕');
+            ctx.telegram.editMessageText(ctx.chat.id, answer.message_id, 0, '😕Ničto ne jest najdeno...\nPoględajte tu👇👇👇', Markup.inlineKeyboard([Markup.button.url('link', `https://interslavic-dictionary.com/?text=${ctx.message.text.toLowerCase()}&lang=${lang}-isv`)]));
             console.log(`@${ctx.message.from.username} (id: ${ctx.message.from.id}): ${ctx.message.text}\nBot: 😕\nLanguage: ${lang}\nSpelling: ${spelling}`);
             console.log(error);
             return;
-        }
+        };
     });
-    
     bot.launch();
 };
 
