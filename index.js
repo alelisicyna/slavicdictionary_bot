@@ -20,11 +20,11 @@ function main() {
         set_language = await ctx.reply('Izberi język interfejsa:', {
             reply_markup: {
                 inline_keyboard: [
-                    [ { text: "Anglijsky", callback_data: "en" } ],
-                    [ { text: "Russky", callback_data: "ru" }, { text: "Bělorusky", callback_data: "be" }, { text: "Ukrajinsky", callback_data: "uk" }, ],
-                    [ { text: "Poljsky", callback_data: "pl" }, { text: "Češsky", callback_data: "cs" }, { text: "Slovačsky", callback_data: "sk" }, ],
-                    [ { text: "Slovenečsky", callback_data: "sl" }, { text: "Hrvatsky", callback_data: "hr" }, { text: "Sŕbsky", callback_data: "sr" }],
-                    [ { text: "Makedonsky", callback_data: "mk" }, { text: "Bulgarsky", callback_data: "bg" } ]
+                    [ { text: `${emojis[0]}Anglijsky`, callback_data: "en" } ],
+                    [ { text: `${emojis[1]}Russky`, callback_data: "ru" }, { text: `${emojis[2]}Bělorusky`, callback_data: "be" }, { text: `${emojis[3]}Ukrajinsky`, callback_data: "uk" }, ],
+                    [ { text: `${emojis[4]}Poljsky`, callback_data: "pl" }, { text: `${emojis[5]}Češsky`, callback_data: "cs" }, { text: `${emojis[6]}Slovačsky`, callback_data: "sk" }, ],
+                    [ { text: `${emojis[7]}Slovenečsky`, callback_data: "sl" }, { text: `${emojis[8]}Hrvatsky`, callback_data: "hr" }, { text: `${emojis[9]}Sŕbsky`, callback_data: "sr" }],
+                    [ { text: `${emojis[10]}Makedonsky`, callback_data: "mk" }, { text: `${emojis[11]}Bulgarsky`, callback_data: "bg" } ]
                 ]
             }
         }
