@@ -1,6 +1,7 @@
 const { Telegraf, Markup } = require('telegraf');
 const { message } = require('telegraf/filters');
-const web_dictionary = require('./media/basic.json');
+const sqlite3 = require('sqlite3').verbose();
+const web_dictionary = require('./assets/basic.json');
 const bot = new Telegraf('');
 const lang_codes = ['en', 'ru', 'be', 'uk', 'pl', 'cs', 'sk', 'sl', 'hr', 'sr', 'mk', 'bg'];
 const lang_names = ['Anglijsky', 'Russky', 'Bělorusky', 'Ukrajinsky', 'Poljsky', 'Češsky', 'Slovačsky', 'Slovenečsky', 'Hrvatsky', 'Sŕbsky', 'Makedonsky', 'Bulgarsky'];
@@ -9,12 +10,20 @@ const emojis = [`\u{1F1EC}\u{1F1E7}`, `\u{1F1F7}\u{1F1FA}`, `\u{1F1E7}\u{1F1FE}`
 
    
 function main() {
+    console.log('BOT RUN');
+    const db = new sqlite3.Database('database/users.db', (err) => {
+        if(err) {
+            console.log(err.message);
+        }
+        console.log('DATABASE IS CONNECTED');
+    });
+
     var lang = 'en';
     var spelling = 'standart';
     var set_language;
     bot.start(async (ctx) => {
         await ctx.replyWithPhoto(
-            { source: 'media/start.jpg' },
+            { source: 'assets/start.jpg' },
             { caption: 'Pozdråv! Jesm bot, funkcija ktorogo davati informaciju iz međuslovjanskogo slovnika.\n\n/setlang - izměniti język interfejsa\n@jesm_clovekom - sȯobćiti o pogrěškě' }
         );
         set_language = await ctx.reply('Izberi język interfejsa:', {
@@ -38,6 +47,26 @@ function main() {
                 ctx.telegram.deleteMessage(ctx.chat.id, set_language.message_id);
                 ctx.telegram.sendMessage(ctx.chat.id, 'Język interfejsa izbrany!');
                 lang = lang_codes[i];
+                // тут функцыя не аднаўляе БД пасьля 2+ разу карыстаньня /start
+                /* db.all("SELECT * FROM users", function(err, allRows) {
+                    for(var j = 0; j < allRows.length; j++) {
+                        if(allRows[j]['telegram_id'] == ctx.from.id) {
+                            console.log('ты ужо ё');
+                            if(allRows[j]['language'] != lang_codes[i]) {
+                                console.log('мова зьменена');
+                                return;
+                            } else {
+                                console.log('з мовай усё ок');
+                                return;
+                            };
+                        } else {
+                            let input_database = db.prepare("INSERT INTO users (telegram_id, language) VALUES(?, ?)");
+                            input_database.run(ctx.from.id, lang_codes[i]);
+                            input_database.finalize();
+                            return;
+                        };
+                    };
+                }); */
             });
         };
     });
@@ -81,7 +110,6 @@ function main() {
                 for(let j = 0; j < word[lang][i][1].length; j++) {
                     if(ctx.message.text.toLowerCase() == String(word[lang][i][1][j])) {
                         var langs = '';
-                        var interslavic_words = '';
                         for(let l = 0; l < lang_codes.length; l++) {
                             langs = langs + `\n${emojis[l]}${lang_names[l]}: ${word[lang_codes[l]][i][1][0]}`;
                         }
@@ -94,7 +122,7 @@ function main() {
             };
             throw new Error('Nothing was found');
         } catch(error) {
-            ctx.telegram.editMessageText(ctx.chat.id, answer.message_id, 0, '😕Ničto ne jest najdeno...\nPoględajte tu👇👇👇', Markup.inlineKeyboard([Markup.button.url('link', `https://interslavic-dictionary.com/?text=${ctx.message.text.toLowerCase()}&lang=${lang}-isv`)]));
+            ctx.telegram.editMessageText(ctx.chat.id, answer.message_id, 0, '😕Ničto ne jest najdeno...\nPoględajte tu👇👇👇', Markup.inlineKeyboard([Markup.button.url(`\u{1F310}Link`, `https://interslavic-dictionary.com/?text=${ctx.message.text.toLowerCase()}&lang=${lang}-isv`)]));
             console.log(`@${ctx.message.from.username} (id: ${ctx.message.from.id}): ${ctx.message.text}\nBot: 😕\nLanguage: ${lang}\nSpelling: ${spelling}`);
             console.log(error);
             return;
