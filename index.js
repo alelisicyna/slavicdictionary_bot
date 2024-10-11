@@ -1,16 +1,24 @@
 const { Telegraf, Markup } = require('telegraf');
 const { message } = require('telegraf/filters');
+require('dotenv').config()
 const sqlite3 = require('sqlite3').verbose();
 const web_dictionary = require('./assets/basic.json');
-const bot = new Telegraf('');
+const bot = new Telegraf(process.env.TOKEN);
 const lang_codes = ['en', 'ru', 'be', 'uk', 'pl', 'cs', 'sk', 'sl', 'hr', 'sr', 'mk', 'bg'];
-const lang_names = ['Anglijsky', 'Russky', 'Bělorusky', 'Ukrajinsky', 'Poljsky', 'Češsky', 'Slovačsky', 'Slovenečsky', 'Hrvatsky', 'Sŕbsky', 'Makedonsky', 'Bulgarsky'];
-const emojis = [`\u{1F1EC}\u{1F1E7}`, `\u{1F1F7}\u{1F1FA}`, `\u{1F1E7}\u{1F1FE}`, `\u{1F1FA}\u{1F1E6}`, `\u{1F1F5}\u{1F1F1}`, `\u{1F1E8}\u{1F1FF}`, `\u{1F1F8}\u{1F1F0}`, `\u{1F1F8}\u{1F1EE}`, `\u{1F1ED}\u{1F1F7}`, `\u{1F1F7}\u{1F1F8}`, `\u{1F1F2}\u{1F1F0}`, `\u{1F1E7}\u{1F1EC}`];
+const lang_names = ['Anglijsky', 'Russky', 'Bělorusky', 'Ukrajinsky',
+                    'Poljsky', 'Češsky', 'Slovačsky', 'Slovenečsky',
+                    'Hrvatsky', 'Sŕbsky', 'Makedonsky', 'Bulgarsky'];
+const emojis = [
+	`\u{1F1EC}\u{1F1E7}`, `\u{1F1F7}\u{1F1FA}`, `\u{1F1E7}\u{1F1FE}`,
+	`\u{1F1FA}\u{1F1E6}`, `\u{1F1F5}\u{1F1F1}`, `\u{1F1E8}\u{1F1FF}`,
+	`\u{1F1F8}\u{1F1F0}`, `\u{1F1F8}\u{1F1EE}`, `\u{1F1ED}\u{1F1F7}`,
+	`\u{1F1F7}\u{1F1F8}`, `\u{1F1F2}\u{1F1F0}`, `\u{1F1E7}\u{1F1EC}`
+];
 
 
    
 function main() {
-    console.log('BOT RUN');
+    console.log(`BOT RUN\nTOKEN: ${process.env.TOKEN}`);
     const db = new sqlite3.Database('database/users.db', (err) => {
         if(err) {
             console.log(err.message);
@@ -132,3 +140,4 @@ function main() {
 };
 
 main();
+
