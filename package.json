@@ -9,6 +9,7 @@
   "author": "alelisicyna",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "sqlite3": "^5.1.7",
     "telegraf": "^4.16.3"
   }
